@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Proyecto final jQuery</title>
+	<link rel="stylesheet" href="jquery-ui/jquery-ui.css">
+	<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+	
+    <style type="text/css">
+    	body{
+    		margin: 0;
+    		padding: 0;
+    		font-family: sans-serif;
+    	}
+    	#barra{
+    		width: 100%;
+    		background-color: #EEEEEE;
+    		height: 30px;
+    		padding: 5px;
+
+    		
+    	}
+    	#logo {
+    		float: left;
+    		font-weight: bold;
+    		font-size: 120%;
+    		padding: 3px 5px;
+    		
+    	}
+    	#contenedorBotones{
+    		margin: 0 auto;
+    		width: 250px;
+    		
+    	}
+    	.botones{
+    		
+    		border: 1px solid black;
+    		padding: 3px;
+    		font-size: 90%;
+    		float: left;
+    		border-right: none;
+
+    	}
+    	#output{
+    		border-right: 1px solid black;
+    		border-top-right-radius: 5px;
+    		border-bottom-right-radius: 5px;
+    	}
+    	#html{
+    		border-top-left-radius: 5px;
+    		border-bottom-left-radius: 5px;
+    	}
+    	.botonMarcado{
+    		background-color: #E5E5E5;
+    	}
+    	.botonActivo{
+    		background-color: #42d9f4;
+    	}
+    	textarea{
+    		   resize: none;
+                border-top:none;
+                border-color:grey;
+    	}
+    	.panel{
+    		float: left;
+    		width: 50%;
+    		border-left: none;
+    	}
+    	iframe{
+    		border: none;
+    	}
+    	.oculto{
+    		display: none;
+    	}
+    </style>
+</head>
+<body>
+
+<div id="barra">
+	<div id="logo">CodePlayer</div>
+	<div id="contenedorBotones">
+		<div id="html" class="botones botonActivo">HTML</div>
+		<div id="css" class="botones">CSS</div>
+		<div id="javascript" class="botones">Javascript</div>
+		<div id="output" class="botones botonActivo">Output</div>
+	</div>	
+</div>
+<div id="contendorBody">
+	<textarea id="htmlPanel" class="panel"><p>hola a todos</p></textarea>
+	<textarea id="cssPanel" class="panel oculto">p { color: red}</textarea>
+	<textarea id="javascriptPanel" class="panel oculto">alert("hola")</textarea>
+	<iframe id="outputPanel" class="panel"></iframe>
+	
+</div>
+
+<script type="text/javascript">
+
+
+	function actualizarSalida() {
+		$("iframe").contents().find("html").html("<html><head><style type= 'text/css'>" + $("#cssPanel").val() + "</style></head><body>" + $("#htmlPanel").val() + "</body></html>");
+		document.getElementById("outputPanel").contentWindow.eval($("#javascriptPanel").val());
+	}
+
+	$(".botones").hover(function(){$(this).addClass("botonMarcado")}, function(){ $(this).removeClass("botonMarcado")})
+
+	$(".botones").click(function(){
+		$(this).toggleClass("botonActivo") ;
+		$(this).removeClass("botonMarcado");
+		var  panelId = $(this).attr("id") + "Panel"; 
+		$("#" +panelId).toggleClass("oculto");
+		var panelesActivos =  4 - $(".oculto").length;
+
+		$(".panel").width($(window).width() / panelesActivos -10);
+	})
+
+	$(".panel").height($(window).height() -$("#barra").height());
+	$(".panel").width($(window).width()/2 -10);
+
+	actualizarSalida();
+
+	$("textarea").on('change keyup paste', function() {
+    	actualizarSalida();
+
+    });
+	
+     // $("textarea").on('change keyup paste',function(){
+       //     $("iframe").contents().find("html").html($("#htmlPanel").val());   
+         //  }); 
+
+
+
+
+	/*$("#html").click(function() {
+		if (clickHtml == false) {
+		$("#html").css("backgroundColor", "#42d9f4");
+		clickHtml = true;
+	}else {
+		$("#html").css("backgroundColor", "#EEEEEE");
+		clickHtml = false;
+	}
+})*/
+</script>
+</body>
+</html>
